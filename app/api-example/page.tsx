@@ -6,7 +6,7 @@ export default function Page() {
   const [data, setData] = useState()
   useEffect(() => {
     ;(async () => {
-      const res = await fetch("/api/protected")
+      const res = await fetch("/api/protected", {headers: {"nice": "rice"}})
       const json = await res.json()
       setData(json)
     })()
