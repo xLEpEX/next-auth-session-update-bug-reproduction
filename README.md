@@ -1,3 +1,14 @@
+## Reproduce
+
+1. clone the repository from the Reproduction URL
+2. create a app at https://dev.twitch.tv/console/apps/create
+- Category -> Website Integration
+- Client Type -> Confidential
+3. update .env.local
+4. go to http://localhost:3000/client-example
+5. try to update the session
+
+
 > The example repository is maintained from a [monorepo](https://github.com/nextauthjs/next-auth/tree/main/apps/examples/nextjs). Pull Requests should be opened against [`nextauthjs/next-auth`](https://github.com/nextauthjs/next-auth).
 
 <p align="center">
