@@ -1,50 +1,8 @@
 import NextAuth from "next-auth"
+import AzureADProvider from "next-auth/providers/azure-ad";
 
-import { JWT } from "next-auth/jwt"
 import TwitchProvider from "next-auth/providers/twitch"
-export interface TwitchSession extends Session {
-  activeAccount: TwitchAccount,
-  eligibleAccounts: TwitchAccount[],
-  access_token: string
-}
 
-export interface TwitchAccount {
-  name: string | null | undefined,
-  id: string | null | undefined,
-  role: string,
-  avatar: string | null | undefined,
-}
-
-export interface TwitchToken  extends Session {
-  access_token: string,
-  refresh_token: string
-  expires_at: number,
-  scope: string,
-}
-
-const loadEligibleAccounts = async (token: JWT) => {
-  return [{
-      avatar: "session.user?.image",
-      name: "FAYE",
-      id: "dsafsafesafe",
-      role: "MANAGER"
-  },{
-      avatar: "session.user?.image",
-      name: "SARAH",
-      id: "asdfsadf",
-      role: "EDITOR"
-  },{
-      avatar: "session.user?.image",
-      name: "TOM",
-      id: "asdfsadf",
-      role: "EDITOR"
-  },{
-      avatar: "session.user?.image",
-      name: "MAX",
-      id: "asdfsadf",
-      role: "EDITOR"
-  }]
-}
 import type { NextAuthConfig, Session } from "next-auth"
 export let jwtCounter = 0;
 export let sessionCounter = 0;
@@ -54,8 +12,17 @@ export const config = {
   },
   providers: [
     TwitchProvider({
-      clientId: process.env.TWITCH_CLIENT_ID!,
-      clientSecret: process.env.TWITCH_CLIENT_SECRET!,    
+      clientId: process.env.TWITCH_CLIENT_ID,
+      clientSecret: process.env.TWITCH_CLIENT_SECRET,    
+    }),
+    AzureADProvider({
+      clientId: process.env.AZURE_AD_CLIENT_ID,
+      clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
+      tenantId: process.env.AZURE_AD_TENANT_ID,
+      profile(profile) {
+        console.log("profile", profile)
+        return {}
+      }
     })
   ],
   
@@ -66,12 +33,13 @@ export const config = {
       if (pathname === "/middleware-example") return !!auth
       return true
     },
-    jwt({ token, trigger, session }) {
+    jwt({ token, trigger, session, account }) {
       jwtCounter++;
       console.log("--- jwt --- " + jwtCounter)
       console.log("jwt trigger", trigger)
       console.log("jwt session user", session?.user?.name)
-      
+      console.log("jwt token", token)
+      console.log("jwt account", account)
       if (trigger === "update" && session?.user?.name) {
         // Note, that `session` can be any arbitrary object, remember to validate it!
         console.log("session.user.name", session.user.name)

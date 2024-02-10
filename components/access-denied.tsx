@@ -9,7 +9,7 @@ export default function AccessDenied() {
           href="/api/auth/signin"
           onClick={(e) => {
             e.preventDefault()
-            signIn('twitch')
+            signIn()
           }}
         >
           You must be signed in to view this page

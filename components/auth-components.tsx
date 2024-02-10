@@ -9,7 +9,7 @@ export function SignIn({
     <form
       action={async () => {
         "use server"
-        await signIn('twitch')
+        await signIn()
       }}
     >
       <Button {...props}>Sign In</Button>
